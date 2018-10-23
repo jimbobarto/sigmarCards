@@ -1,0 +1,10 @@
+<ul>
+	{% for card in cards %}
+		<div class="draggable draggable-card ui-draggable ui-draggable-handle">
+			<a>
+				<img class='card hidden resize' src="{{url_for('static', filename='images/library/')}}{{ card|e }}"/>
+				<span class='card-name'>{{ card|e }}</span>
+			</a>
+		</div>
+	{% endfor %}
+</ul>

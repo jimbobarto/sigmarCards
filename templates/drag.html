@@ -1,0 +1,229 @@
+<html>
+	<head>
+		<style>
+			html {
+				font-family: arial;
+			}
+			ul {
+				list-style: none;
+			    padding-inline-start: 5px;
+			}
+			.align-right {
+				float: left;
+				display: inline-block;
+				height: 718px;
+				margin-left: 20px;
+			}
+			#card-list {
+				height: 668px;
+				overflow-y: scroll;
+				overflow-x: visible;
+				border: 1px solid black;
+			}
+			.draggable-card {
+				padding: 0.5em;
+				margin: 5px;
+				border: 1px solid #DFE1E5;
+				z-index: 1;
+			}
+			.droppable {
+				float: left;
+				margin: 2px;
+				position: relative;
+			}
+			.top-right {
+				opacity: 0;
+				position: absolute;
+				top: 0%;
+				left: 90%;
+			}
+			.droppable:hover .top-right {
+				opacity: 1;
+			}
+			.hidden {
+				display: none;
+			}
+			.visible {
+				display: block;
+			}
+			img.resize {
+				width:243px; /* you can use % */
+				height: auto;
+			}
+			.nightvault-background {
+				float: left;
+			    background: url({{url_for('static', filename='images/nightvault_background.jpg')}});
+			    background-repeat: no-repeat;
+			}
+			.sub-div {
+				height:350px;
+				padding-left:10px;
+				padding-right:10px;
+				padding-top:10px;
+			}
+			.small-image {
+				height: 340px;
+				width: 243px;
+			    background: url({{url_for('static', filename='images/blank.png')}});
+			    background-repeat: no-repeat;
+			    background-size: 243px;
+			}
+			.align-bottom {
+				padding-top: 50px;
+			}
+			.highlight {
+    			background-color: white;
+    			opacity: 0.2;
+			}
+			.text-field {
+				height: 30px;
+				margin: 10px;
+			}
+			.card-button {
+				border-radius: 0px;
+				height: 30px;
+				background-color: white;
+				border-color: grey;
+				margin-right: 20px;
+			}
+		</style>
+
+		<link rel="stylesheet" href="{{url_for('static', filename='css/jquery-ui.css')}}">
+
+		<script src="{{url_for('static', filename='js/jquery.js')}}"></script>
+		<script src="{{url_for('static', filename='js/jquery-ui.js')}}"></script>
+		<script src="{{url_for('static', filename='js/jquery.ui.touch-punch.min.js')}}"></script>
+		<script src="{{url_for('static', filename='js/html2canvas.min.js')}}"></script>
+		<script>
+			$SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+			$( function() {
+				$(".draggable").draggable({
+				  revert: 'invalid',
+				  appendTo: 'body',
+				  helper: 'clone'
+				});
+				$( ".droppable" ).droppable({
+					classes: {
+      					'ui-droppable-hover': 'highlight'
+    				},
+			      drop: function( event, ui ) {
+			        var $this = $(this);
+			        ui.draggable.removeClass("draggable-card");
+			        ui.draggable.find("span.card-name").addClass("hidden");
+
+			        addImage(ui.draggable.find("img.card").attr("src"), $this);
+			        
+				    ui.draggable.position({
+				      my: "center",
+				      at: "center",
+				      of: $this,
+				      using: function(pos) {
+				        $(this).animate(pos, 10, "linear");
+				      }
+				    });
+			      }
+			    });
+			} );
+			function screenshot() {
+				html2canvas(document.body, {taintTest: false, allowTaint: true}).then(canvas => {
+	   				//var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
+	   				canvas.toBlob(function(blob){
+	   					var a = document.createElement('a');
+     					a.href = URL.createObjectURL(blob);
+	         			a.download = 'screenshot.png';
+     					if ($("#screenshot-name").val() != "") {
+     						a.download = $("#screenshot-name").val();	
+     					}
+	         			a.click();
+    				});
+				});
+			}
+			function revert(currentElement) {
+				var source = $(currentElement).closest(".droppable").find("img.resize").attr('src');
+				$(".draggable img[src='" + source + "']").siblings("span.card-name").removeClass("hidden");
+				$(".draggable img[src='" + source + "']").closest(".draggable").attr("style", "position: relative;");
+
+				$(".draggable img[src='" + source + "']").closest(".draggable").addClass("draggable-card");
+
+				$(currentElement).closest(".droppable").find("div.card-holder").remove();
+			}
+			function clearAllCards() {
+				$("div#card-list .draggable").each( function(index) {
+	      			$(this).find("span.card-name").removeClass("hidden");
+	      			$(this).attr("style", "position: relative;");
+	      			$(this).addClass("draggable-card");
+		      	});
+				$(".droppable").each( function(index) {
+	      			$(this).find("div.card-holder").remove();
+		      	});
+			}
+			function addImage(imageSource, destination) {
+				destination.html("<div class='card-holder'><img class='resize' src='" + imageSource + "'/><div class='top-right'><a onclick='revert(this);'><img src='" + "{{url_for('static', filename='images/cancel.png')}}" + "'/></a></div></div>");
+			}
+			function cardSearch() {
+				$.get($SCRIPT_ROOT + '/_get_cards', {
+			        search_string: $('input#card_search').val()
+			      }, function(data) {
+			      	$("div#card-list .draggable").each( function(index) {
+			      		if ( !(data.includes($(this).find("span.card-name").text())) ) {
+			      			$(this).addClass("hidden");
+			      		}
+			      	})
+			      });
+			}
+			function clearCardSearch() {
+				$.get($SCRIPT_ROOT + '/_get_all_cards', function(data) {
+			      	$("div#card-list .draggable").each( function(index) {
+		      			$(this).removeClass("hidden");
+			      	})
+			      });
+			}
+		</script>
+	</head>
+	<body>
+		<div id="main">
+			<div class="nightvault-background">
+				<div class="sub-div">
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+				</div>
+				<div class="sub-div">
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+					<div class="droppable small-image"></div>
+				</div>
+				<div class="align-bottom">
+					Screenshot name:&nbsp;<input type="text" class="text-field" id="screenshot-name">
+					<button class="card-button" onclick="screenshot();">Take screenshot</button>
+					<button class="card-button" onclick="clearAllCards();">Clear deck</button>
+				</div>
+			</div>
+			<div class="align-right">
+				<div>
+					<input type="text" class="text-field" id="card_search">
+					<button class="card-button" onclick="cardSearch();">search</button>
+					<button class="card-button" onclick="clearCardSearch();">clear</button>
+				</div>
+				<div id="card-list">
+					{% block card_list %}
+						<ul>
+							{% for card in cards %}
+								<div class="draggable draggable-card">
+									<a>
+										<img class='card hidden resize' src="{{url_for('static', filename='images/library/')}}{{ card|e }}"/>
+										<span class='card-name'>{{ card|e }}</span>
+									</a>
+								</div>
+							{% endfor %}
+						</ul>
+					{% endblock %}
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
