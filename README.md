@@ -1,6 +1,6 @@
 # sigmarCards
 
-First off, install virtualenv (if you see 'python2' or 'python3' in any of these instructions, just type 'python'):
+Once you've cloned this repository locally, install virtualenv (if you see 'python2' or 'python3' in any of these instructions, just type 'python'):
 http://flask.pocoo.org/docs/1.0/installation/#install-install-virtualenv
 
 Now (as per http://flask.pocoo.org/docs/1.0/installation/#python-version):
