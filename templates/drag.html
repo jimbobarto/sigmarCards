@@ -42,18 +42,7 @@
 					<button class="card-button" onclick="clearCardSearch();">clear</button>
 				</div>
 				<div id="card-list">
-					{% block card_list %}
-						<ul>
-							{% for card in cards %}
-								<div class="draggable draggable-card">
-									<a>
-										<img class='card resize-small' src="{{url_for('static', filename='images/library/')}}{{ card|e }}"/>
-										<span class='card-name hidden'>{{ card|e }}</span>
-									</a>
-								</div>
-							{% endfor %}
-						</ul>
-					{% endblock %}
+					{% include 'card-list.html' %}
 				</div>
 			</div>
 		</div>
