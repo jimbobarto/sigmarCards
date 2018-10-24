@@ -1,0 +1,89 @@
+html {
+	font-family: arial;
+}
+ul {
+	list-style: none;
+    padding-inline-start: 5px;
+}
+.align-right {
+	float: left;
+	display: inline-block;
+	height: 718px;
+	margin-left: 20px;
+}
+#card-list {
+	height: 668px;
+	overflow-y: scroll;
+	overflow-x: visible;
+	border: 1px solid black;
+}
+.draggable-card {
+	padding: 0.5em;
+	margin: 5px;
+	border: 1px solid #DFE1E5;
+	z-index: 1;
+}
+.droppable {
+	float: left;
+	margin: 2px;
+	position: relative;
+}
+.top-right {
+	opacity: 0;
+	position: absolute;
+	top: 0%;
+	left: 90%;
+}
+.droppable:hover .top-right {
+	opacity: 1;
+}
+.hidden {
+	display: none;
+}
+.visible {
+	display: block;
+}
+img.resize {
+	width:243px; /* you can use % */
+	height: auto;
+}
+img.resize-small {
+	width:120px; /* you can use % */
+	height: auto;
+}
+.nightvault-background {
+	float: left;
+    background: url("../images/nightvault_background.jpg");
+    background-repeat: no-repeat;
+}
+.sub-div {
+	height:350px;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:10px;
+}
+.small-image {
+	height: 340px;
+	width: 243px;
+    background: url("../images/blank.png");
+    background-repeat: no-repeat;
+    background-size: 243px;
+}
+.align-bottom {
+	padding-top: 50px;
+}
+.highlight {
+	background-color: white;
+	opacity: 0.2;
+}
+.text-field {
+	height: 30px;
+	margin: 10px;
+}
+.card-button {
+	border-radius: 0px;
+	height: 30px;
+	background-color: white;
+	border-color: grey;
+	margin-right: 20px;
+}
