@@ -8,7 +8,7 @@ Now (as per http://flask.pocoo.org/docs/1.0/installation/#python-version):
 cd into the project directory and run the following commands
 
 ```
-python -m venv venv
+virtualenv venv
 ```
 ```
 . venv/bin/activate
