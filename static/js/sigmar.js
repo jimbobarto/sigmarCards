@@ -26,7 +26,10 @@ function setDraggable() {
 	        $(this).animate(pos, 10, "linear");
 	      }
 	    });
-      }
+      },
+		accept: function(draggable) {
+			return $(this).find("div.card-holder").length == 0;
+  		}
     });
 }
 
@@ -76,7 +79,11 @@ function clearAllCards() {
 }
 
 function addImage(imageSource, destination) {
-	destination.html("<div class='card-holder'><img class='resize' src='" + imageSource + "'/><div class='top-right'><a onclick='revert(this);'><img src='" + "{{url_for('static', filename='images/cancel.png')}}" + "'/></a></div></div>");
+	$.get($SCRIPT_ROOT + '/_get_dropped_card_template', {
+        img_src: imageSource
+      }, function(data) {
+      	destination.html(data);
+  	});
 }
 
 function cardSearch() {

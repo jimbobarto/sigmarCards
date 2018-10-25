@@ -25,3 +25,8 @@ def get_all_cards():
 	cards.sort()
 	return cards
 
+@app.route('/_get_dropped_card_template')
+def get_dropped_card():
+	img_src = request.args.get('img_src', '')
+	print(img_src)
+	return render_template('dropped-card.html', img_src=img_src)
