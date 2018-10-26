@@ -59,7 +59,7 @@ function screenshot() {
 
 function revert(currentElement) {
 	var source = $(currentElement).closest(".droppable").find("img.resize").attr('src');
-	$(".draggable img[src='" + source + "']").siblings("span.card-name").removeClass("hidden");
+	$(".draggable img[src='" + source + "']").closest(".draggable").removeClass("hidden");
 	$(".draggable img[src='" + source + "']").closest(".draggable").attr("style", "position: relative;");
 
 	$(".draggable img[src='" + source + "']").closest(".draggable").addClass("draggable-card");
