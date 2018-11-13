@@ -1,5 +1,6 @@
+import os
 from flask import Flask
-from flask import render_template, request, jsonify
+from flask import render_template, request, jsonify, send_from_directory
 from os import listdir
 from os.path import isfile, join
 app = Flask(__name__)
@@ -8,6 +9,10 @@ app = Flask(__name__)
 @app.route('/')
 def init():
 	return render_template('drag.html', cards=get_all_cards())
+
+@app.route('/favicon.ico') 
+def favicon(): 
+    return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 @app.route('/_get_filtered_cards')
 def get_filtered_cards():
