@@ -43,7 +43,7 @@ function clearAndFocusSearch() {
 }
 
 function screenshot() {
-	html2canvas(document.body, {taintTest: false, allowTaint: true}).then(canvas => {
+	html2canvas($("#deck").get(0), {taintTest: false, allowTaint: true}).then(canvas => {
 			//var image = canvas.toDataURL("image/png").replace("image/png", "image/octet-stream");  // here is the most important part because if you dont replace you will get a DOM 18 exception.
 			canvas.toBlob(function(blob){
 				var a = document.createElement('a');
