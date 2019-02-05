@@ -26,6 +26,7 @@ function setDraggable() {
 	        $(this).animate(pos, 10, "linear");
 	      }
 	    });
+	    clearAndFocusSearch();
       },
 		accept: function(draggable) {
 			return $(this).find("div.card-holder").length == 0;
@@ -40,6 +41,11 @@ function hideDroppedCardsInList() {
 			$(".draggable img[src='" + droppedSource + "']").closest(".draggable").addClass("hidden");
 		}
 	})
+}
+
+function clearAndFocusSearch() {
+	$("#card_search").val("");
+	$("#card_search").focus();
 }
 
 function screenshot() {
