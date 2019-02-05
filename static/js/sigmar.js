@@ -12,20 +12,13 @@ function setDraggable() {
 		},
       drop: function( event, ui ) {
         var $this = $(this);
-        //ui.draggable.removeClass("draggable-card");
-        ui.draggable.addClass("hidden");
-        hideDroppedCardsInList();
+        
+        if ($('input[name=hide_cards]:checked').val() == 'yes') {
+        	hideDroppedCardsInList(ui);
+        }
 
         addImage(ui.draggable.find("img.card").attr("src"), $this);
         
-	    ui.draggable.position({
-	      my: "center",
-	      at: "center",
-	      of: $this,
-	      using: function(pos) {
-	        $(this).animate(pos, 10, "linear");
-	      }
-	    });
 	    clearAndFocusSearch();
       },
 		accept: function(draggable) {
@@ -34,7 +27,8 @@ function setDraggable() {
     });
 }
 
-function hideDroppedCardsInList() {
+function hideDroppedCardsInList(ui) {
+    ui.draggable.addClass("hidden");
 	$("div.droppable img").each( function(index) {
 		var droppedSource = $(this).attr("src");
 		if ($(".draggable img[src='" + droppedSource + "']").length) {
