@@ -1,4 +1,5 @@
 import os
+import re
 from flask import Flask
 from flask import render_template, request, jsonify, send_from_directory
 from os import listdir
@@ -17,7 +18,7 @@ def favicon():
 @app.route('/_get_filtered_cards')
 def get_filtered_cards():
 	search_string = request.args.get('search_string')
-	prefixed_cards = [filename for filename in listdir('static/images/library/') if (filename.find(search_string) > -1 and not (filename.startswith('.')))]
+	prefixed_cards = [filename for filename in listdir('static/images/library/') if (not (filename.startswith('.')) and (re.search(search_string, filename, re.IGNORECASE) ))]
 	prefixed_cards.sort()
 	return render_template('card-list.html', cards=prefixed_cards)
 
